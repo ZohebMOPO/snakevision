@@ -21,3 +21,13 @@ while True:
     height, width = grabbed_Frame.shape[:2]
 
     grabbed_Frame = cv2.resize(grabbed_Frame, dsize=(600, height))
+    blur_frame = cv2.GaussianBlur(grabbed_Frame, (11, 11), 0)
+    hsv_value = cv2.cvtColor(blur_frame, cv2.COLOR_HSV2BGR)
+
+    cover = cv2.inRange(hsv_value, blueLower, blueUpper)
+
+    cover = cv2.erode(cover, None, iterations=2)
+    cover = cv2.dilate(cover, None, iterations=2)
+
+    left_cover = cover[:, 0:width//2]
+    right_cover = cover[:, width//2:]
