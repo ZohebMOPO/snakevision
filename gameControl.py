@@ -85,4 +85,24 @@ while True:
 
     if len(contour_r):
         c = max(contour_r, key=cv2.contourArea)
-        ((x2, y2), r2)
+        ((x2, y2), r2) = cv2.minEnclosingCircle(c)
+        M = cv2.moments(c)
+        left_centre = (int(M["m10"] / (M["m00"]+0.000001)),
+                       int(M["m01"] / (M["m00"] + 0.000001)))
+    if r > radius_of_circle:
+        cv2.circle(grabbed_Frame, (int(x2), int(y2)),
+                   int(r), (0, 255, 0), 2)
+        cv2.circle(grabbed_Frame, right_centre, 5, (0, 255, 0), -1)
+
+        if right_centre[1] < (height/2 - window_size//2):
+            cv2.putText(grabbed_Frame, 'LEFT', (20, 50),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+            pyautogui.press('left')
+            keyPressed = True
+            keyPressed_lr = True
+        elif left_centre[1] > (height/2 + window_size//2):
+            cv2.putText(grabbed_Frame, 'RIGHT', (20.50),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+            pyautogui.press('right')
+            keyPressed = True
+            keyPressed_lr = True
