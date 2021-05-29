@@ -45,43 +45,40 @@ while True:
 
         return contours
 
-        contour_l = cv2.findContours(left_cover.copy(),
-                                     cv2.RETR_EXTERNAL,
-                                     cv2.CHAIN_APPROX_SIMPLE)
-        contour_l = extract_contour(contour_l)
-        left_centre = None
+    contour_1 = cv2.findContours(left_cover.copy(),
+                                 cv2.RETR_EXTERNAL,
+                                 cv2.CHAIN_APPROX_SIMPLE
+                                 )
+    contour_1 = extract_contour(contour_1)
+    left_centre = None
 
-        contour_r = cv2.findContours(right_cover.copy(),
-                                     cv2.RETR_EXTERNAL,
-                                     cv2.CHAIN_APPROX_SIMPLE
-                                     )
-        contour_r = extract_contour(contour_r)
-        right_centre = None
+    contour_r = cv2.findContours(right_cover.copy(),
+                                 cv2.RETR_EXTERNAL,
+                                 cv2.CHAIN_APPROX_SIMPLE
+                                 )
+    contour_r = extract_contour(contour_r)
+    right_centre = None
 
-        if len(contour_l) > 0:
-        c = max(contour_l, key=cv2.contourArea)
+    if len(contour_1) > 0:
+        c = max(contour_1, key=cv2.contourArea)
         ((x, y), r) = cv2.minEnclosingCircle(c)
         M = cv2.moments(c)
-        # below is formula for calculating centroid of circle
-        left_centre = (int(M["m10"] / (M["m00"]+0.000001)),
+        left_centre = (int(M["m10"] / (M["m00"] + 0.000001)),
                        int(M["m01"] / (M["m00"]+0.000001)))
 
-        if r > radius_of_circle:
-            cv2.circle(grabbed_frame, (int(x), int(y)), int(r),
-                       (0, 255, 0), 2)
-            cv2.circle(grabbed_frame, left_centre, 5, (0, 255, 0), -1)
+    if r > radius_of_circle:
+        cv2.circle(grabbed_Frame, (int(x), int(y), ), int(r), (0, 255, 0), 2)
+        cv2.circle(grabbed_Frame, left_centre, 5, (0, 255, 0), -1)
 
-            if left_centre[1] < (height/2 - window_size // 2):
-                cv2.putText(grabbed_frame, 'LEFT', (20, 50),
-                            cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
-                pyautogui.press('left')
-                current_key.add(left)
-                keyPressed = True
-                keyPressed_lr = True
-            elif left_centre[1] > (height/2 + window_size // 2):
-                cv2.putText(grabbed_frame, 'RIGHT', (20, 50),
-                            cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
-                pyautogui.press('right')
-                current_key.add(right)
-                keyPressed = True
-                keyPressed_lr = True
+        if left_centre[1] < (height/2 - window_size//2):
+            cv2.putText(grabbed_Frame, 'LEFT', (20, 50),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+            pyautogui.press('left')
+            keyPressed = True
+            keyPressed_lr = True
+        elif left_centre[1] > (height/2 + window_size//2):
+            cv2.putText(grabbed_Frame, 'RIGHT', (20, 50),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+            pyautogui.press('right')
+            keyPressed = True
+            keyPressed_lr = True
