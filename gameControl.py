@@ -45,11 +45,11 @@ while True:
 
         return contours
 
-    contour_1 = cv2.findContours(left_cover.copy(),
+    contour_l = cv2.findContours(left_cover.copy(),
                                  cv2.RETR_EXTERNAL,
                                  cv2.CHAIN_APPROX_SIMPLE
                                  )
-    contour_1 = extract_contour(contour_1)
+    contour_l = extract_contour(contour_l)
     left_centre = None
 
     contour_r = cv2.findContours(right_cover.copy(),
@@ -59,8 +59,8 @@ while True:
     contour_r = extract_contour(contour_r)
     right_centre = None
 
-    if len(contour_1) > 0:
-        c = max(contour_1, key=cv2.contourArea)
+    if len(contour_l) > 0:
+        c = max(contour_l, key=cv2.contourArea)
         ((x, y), r) = cv2.minEnclosingCircle(c)
         M = cv2.moments(c)
         left_centre = (int(M["m10"] / (M["m00"] + 0.000001)),
@@ -82,3 +82,7 @@ while True:
             pyautogui.press('right')
             keyPressed = True
             keyPressed_lr = True
+
+    if len(contour_r):
+        c = max(contour_r, key=cv2.contourArea)
+        ((x2, y2), r2)
